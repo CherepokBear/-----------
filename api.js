@@ -1,4 +1,4 @@
-import { renderComments } from "./main.js";
+import { renderComments } from "./renderComments.js";
 const host = "https://wedev-api.sky.pro/api/v1/dima-vorobev/comments";
 
 export function fetchComments() {

@@ -2,27 +2,28 @@ import { renderComments} from "./renderComments.js";
 import { fetchComments, postComment} from "./api.js";
 import { delay, sanitizeHtml} from "./utils.js";
 
+
  const name = document.getElementById('name-input');
  const text = document.getElementById('text-input');
 
  export let comments = [];
 
- let isInitiaLoading = true;
- let isPosting = false;
+ export let isInitiaLoading = true;
+  let isPosting = false;
 
  fetchComments()
  .then((data) => delay(data))
  .then((data) => {
     comments = data; 
     isInitiaLoading = false;
-    renderComents(isInitialLoading, comments);
+    renderComents(isInitiaLoading, comments);
  })
  .catch((error) => {
   alert(error.message)
 })
 
  
-renderComments(isInitialLoading, comments);
+renderComments(isInitiaLoading, comments);
 
 const addButton = document.getElementById('add-button');
 const handlePostClick = ()=> {
@@ -34,7 +35,7 @@ const handlePostClick = ()=> {
   isPostinng = true;
   document.querySelector('.form-loading').style.display = 'block';
   document.querySelector('.add-form').style.display = 'none';
-  renderComments(isInitialLoading, comments);
+  renderComments(isInitiaLoading, comments);
   
   postCommemt(text.value, name.value)
   .then((data)=>{
@@ -44,7 +45,7 @@ const handlePostClick = ()=> {
     document.querySelector('.add-form').style.display = 'flex';
     isPosting = false;
     comments = data;
-    renderComments(isInitialLoading, comments);
+    renderComments(isInitiaLoading, comments);
   })
 .catch((error)=>{
   document.querySelector('.form-loading').style.display = 'none';
@@ -68,7 +69,7 @@ const handlePostClick = ()=> {
     }, 2000);
   }
 });
-renderComments(isInitialLoading, comments);
+renderComments(isInitiaLoading, comments);
 };
 
 addButton.addEventListener("click", handlePostClick);
