@@ -1,5 +1,5 @@
 import { renderComments} from "./renderComments.js";
-import { fetchComments, postComment} from "./api";
+import { fetchComments, postComment} from "./api.js";
 import { delay, sanitizeHtml} from "./utils.js";
 
  const name = document.getElementById('name-input');
