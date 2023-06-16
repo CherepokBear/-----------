@@ -1,5 +1,5 @@
 
-import { sanitizeHtml} from "./utils";
+import { sanitizeHtml} from "./utils.js";
 
 export const renderComments = (isInitialLoading, comments) => {
     const likeButtonClass = "like-button";
