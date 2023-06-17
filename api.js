@@ -5,7 +5,6 @@ const host = "https://wedev-api.sky.pro/api/v1/dima-vorobev/comments";
 const loginHost = "https://wedev-hw-api.versel.app/api/user/login"
 
 export function fetchComments() {
-
   return fetch(host)
     .then((res) => res.json())
     .then((responseData) => {

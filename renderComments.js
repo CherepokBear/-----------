@@ -3,7 +3,7 @@ import { sanitizeHtml } from "./utils.js";
 import { renderLogin } from "./renderLogin.js";
 import { delay } from "./utils.js";
 import { postComment } from "./api.js";
-
+import { text, name } from "./main.js";
 
 export const renderComments = (
     isInitiaLoading,

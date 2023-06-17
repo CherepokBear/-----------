@@ -3,8 +3,8 @@ import { fetchComments, postComment } from "./api.js";
 import { delay } from "./utils.js";
 
 
-//  const name = document.getElementById('name-input');
-//  const text = document.getElementById('text-input');
+export const name = document.getElementById('name-input');
+export const text = document.getElementById('text-input');
 
 const app = document.getElementById('app');
 
@@ -27,7 +27,7 @@ fetchComments()
 
 
 renderComments(isInitiaLoading, comments, app, isPosting);
-console.log("Cдесь косяк");
+
 const addButton = document.getElementById('add-button');
 const handlePostClick = () => {
   if (!name.value || !text.value) {
@@ -72,7 +72,6 @@ const handlePostClick = () => {
         }, 2000);
       }
     });
-
   renderComments(isInitiaLoading, comments, app, isPosting);
 };
 
