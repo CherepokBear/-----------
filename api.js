@@ -1,10 +1,11 @@
 import { renderComments } from "./renderComments.js";
-import { delay} from "./utils.js";
+import { delay } from "./utils.js";
 
 const host = "https://wedev-api.sky.pro/api/v1/dima-vorobev/comments";
-const loginHost ="https://wedev-hw-api.versel.app/api/user/login"
+const loginHost = "https://wedev-hw-api.versel.app/api/user/login"
 
 export function fetchComments() {
+
   return fetch(host)
     .then((res) => res.json())
     .then((responseData) => {
@@ -31,9 +32,9 @@ export function fetchLogin(login, password) {
       })
   })
     .then((response) => {
-      
-        return response.json();
-      })
+
+      return response.json();
+    })
 }
 
 export function postComment(text) {
@@ -43,9 +44,9 @@ export function postComment(text) {
       {
         text,
       }),
-      headers: {
-        Autorization: `Bearer ${token}`,
-      },
+    headers: {
+      Autorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (response.status === 500) {
