@@ -92,7 +92,7 @@ export const renderComments = (
             const goToLogin = document.getElementById('go-to-login');
             goToLogin.addEventListener("click", (event) => {
                 event.preventDefault();
-                renderLogin(isInitiaLoading, comments, app, isPosting)
+                renderLogin()
             })
         }
 

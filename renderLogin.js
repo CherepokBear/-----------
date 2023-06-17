@@ -1,8 +1,8 @@
-import {fetchLogin} from "./api.js"
-import {renderComments} from "./renderComments.js"
+import { fetchLogin } from "./api.js"
+import { renderComments } from "./renderComments.js"
 
-export const renderLogin = (app, isPosting, isInitiaLoadin, comments) => {
-    app.innerHTML = `
+export const renderLogin = () => {
+  app.innerHTML = `
     <div class="container">
     <div class="add-form">
       <h3 class="title">Форма входа</h3>
@@ -13,12 +13,12 @@ export const renderLogin = (app, isPosting, isInitiaLoadin, comments) => {
     </div>
   </div> 
     `;
-    const authButton = document.getElementById("auth-button");
-    authButton.addEventListener("click", () => {
-        const login = document.getElementById("login").value;
-        const password = document.getElementById("password").value;
-        fetchLogin(login, password).then((response) => {
-            renderComments(app, isPosting, isInitiaLoadin, comments, response.user);
-        });
+  const authButton = document.getElementById("auth-button");
+  authButton.addEventListener("click", () => {
+    const login = document.getElementById("login").value;
+    const password = document.getElementById("password").value;
+    fetchLogin(login, password).then((response) => {
+      renderComments(app, isPosting, isInitiaLoadin, comments, response.user);
     });
+  });
 };
