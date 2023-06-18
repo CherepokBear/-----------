@@ -4,38 +4,34 @@ import { renderLogin } from "./renderLogin.js";
 import { delay } from "./utils.js";
 import { postComment } from "./api.js";
 
-
-export const renderComments = (
-    isInitiaLoading,
-    comments,
-    app,
-    isPosting,
-    user) => {
-
+export const renderComments = (isInitiaLoading, comments, app, isPosting, user) => {
     const likeButtonClass = "like-button";
-
-    const commentsHTML = comments.map((comment, index) => {
-        return `
+    const commentsHTML = comments
+        .map((comment, index) => {
+            return `
         <li class="comment" data-index="${index}">
-            <div class="comment-header">
-            <div>${sanitizeHtml(comment.name)}</div>
-            <div>${comment.date.toLocaleDateString()} ${comment.date.toLocaleTimeString()}</div>
-                </div>
-                <div class="comment-body ">
-                <div  class="comment-text">
-                    ${comment.text}
-                </div>
-            </div>
-            <div class="comment-footer">
-            <div class="likes">
-                <span class="likes-counter">${comment.likes}</span>
-                <button data-index=${index} class="${likeButtonClass} ${comment.isLiked ?
-                "-active-like" : ""}
-                ${comment.isLikeLoading ? "-loading-like" : ""}"></button>
-            </div>
-            </div>
-        </li>`;
-    })
+        <div class="comment-header">
+          <div>${sanitizeHtml(comment.name)}</div>
+          <div>${comment.date.toLocaleDateString()} ${comment.date.toLocaleTimeString()}</div>
+        </div>
+        <div class="comment-body">
+          <div class="comment-text">
+            ${sanitizeHtml(
+                comment.text
+                    .replaceAll("%BEGIN_QUOTE", "<div class='quote'>")
+                    .replaceAll("END_QUOTE%", "</div>")
+            )}
+          </div>
+        </div>
+        <div class="comment-footer">
+          <div class="likes">
+            <span class="likes-counter">${comment.likes}</span>
+            <button data-index="${index}" class="${likeButtonClass} ${comment.isLiked ? "-active-like" : ""
+                } ${comment.isLikeLoading ? "-loading-like" : ""}"></button>
+          </div>
+        </div>
+      </li>`;
+        })
         .join("");
 
     const appHtml = `
@@ -94,7 +90,7 @@ export const renderComments = (
             const goToLogin = document.getElementById('go-to-login');
             goToLogin.addEventListener("click", (event) => {
                 event.preventDefault();
-                renderLogin()
+                renderLogin(app, isPosting, isInitiaLoading, comments, user)
             })
         }
 

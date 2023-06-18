@@ -36,7 +36,7 @@ export function fetchLogin(login, password) {
     })
 }
 
-export function postComment(text) {
+export function postComment(text, token) {
   return fetch(host, {
     method: 'POST',
     body: JSON.stringify(
@@ -44,7 +44,7 @@ export function postComment(text) {
         text,
       }),
     headers: {
-      Autorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   })
     .then((response) => {

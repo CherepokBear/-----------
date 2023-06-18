@@ -1,7 +1,7 @@
-import { fetchLogin } from "./api.js"
-import { renderComments } from "./renderComments.js"
+import { fetchLogin } from "./api.js";
+import { renderComments } from "./renderComments.js";
 
-export const renderLogin = () => {
+export const renderLogin = (app, isPosting, isInitiaLoading, comments) => {
   app.innerHTML = `
     <div class="container">
     <div class="add-form">
@@ -18,7 +18,7 @@ export const renderLogin = () => {
     const login = document.getElementById("login").value;
     const password = document.getElementById("password").value;
     fetchLogin(login, password).then((response) => {
-      renderComments(app, isPosting, isInitiaLoading, comments, response.user)
+      renderComments(app, isPosting, isInitiaLoading, comments, response.user);
     });
   });
 };
