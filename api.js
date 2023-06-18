@@ -2,7 +2,7 @@ import { renderComments } from "./renderComments.js";
 import { delay } from "./utils.js";
 
 const host = "https://wedev-api.sky.pro/api/v1/dima-vorobev/comments";
-const loginHost = "https://wedev-hw-api.versel.app/api/user/login"
+const loginHost = "https://wedev-api.sky.pro/api/user/login"
 
 export function fetchComments() {
   return fetch(host)
@@ -12,9 +12,9 @@ export function fetchComments() {
         return {
           name: comment.author.name,
           date: new Date(comment.date),
-          coments: comment.text,
+          text: comment.text,
           likes: comment.likes,
-          isActiveLike: false,
+          isLiked: false,
         }
       });
       return appComents;

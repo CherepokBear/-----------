@@ -3,7 +3,7 @@ import { sanitizeHtml } from "./utils.js";
 import { renderLogin } from "./renderLogin.js";
 import { delay } from "./utils.js";
 import { postComment } from "./api.js";
-import { text, name } from "./main.js";
+// import { text } from "./main.js";
 
 export const renderComments = (
     isInitiaLoading,
@@ -82,8 +82,10 @@ export const renderComments = (
 
         for (const comment of document.querySelectorAll(".comment")) {
             comment.addEventListener('click', () => {
-                text.value = `%BEGIN_QUOTES${comments[commet.dataset.index].name}:
-        ${comments[commet.dataset.index].text}END_QUOTE%
+                const text = document.getElementById("text-input");
+                text.value = `
+                ${comments[commet.dataset.index].name}:
+                ${comments[commet.dataset.index].text}
         `;
             });
         };
