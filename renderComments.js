@@ -4,11 +4,11 @@ import { renderLogin } from "./renderLogin.js";
 import { delay } from "./utils.js";
 import { postComment } from "./api.js";
 
+
 export const renderComments = (isInitiaLoading, comments, app, isPosting, user) => {
     const likeButtonClass = "like-button";
-    const commentsHTML = comments
-        .map((comment, index) => {
-            return `
+    let commentsHTML = comments.map((comment, index) => {
+        return `
         <li class="comment" data-index="${index}">
         <div class="comment-header">
           <div>${sanitizeHtml(comment.name)}</div>
@@ -17,21 +17,21 @@ export const renderComments = (isInitiaLoading, comments, app, isPosting, user) 
         <div class="comment-body">
           <div class="comment-text">
             ${sanitizeHtml(
-                comment.text
-                    .replaceAll("%BEGIN_QUOTE", "<div class='quote'>")
-                    .replaceAll("END_QUOTE%", "</div>")
-            )}
+            comment.text
+                .replaceAll("%BEGIN_QUOTE", "<div class='quote'>")
+                .replaceAll("END_QUOTE%", "</div>")
+        )}
           </div>
         </div>
         <div class="comment-footer">
           <div class="likes">
             <span class="likes-counter">${comment.likes}</span>
             <button data-index="${index}" class="${likeButtonClass} ${comment.isLiked ? "-active-like" : ""
-                } ${comment.isLikeLoading ? "-loading-like" : ""}"></button>
+            } ${comment.isLikeLoading ? "-loading-like" : ""}"></button>
           </div>
         </div>
       </li>`;
-        })
+    })
         .join("");
 
     const appHtml = `
@@ -56,8 +56,8 @@ export const renderComments = (isInitiaLoading, comments, app, isPosting, user) 
                 </div> `
         }
         </div>`;
-
     app.innerHTML = appHtml;
+
     if (!isInitiaLoading && !isPosting) {
         for (const likeButton of document.querySelectorAll(`${likeButtonClass}`)) {
             likeButton.addEventListener('click', (event) => {
@@ -90,17 +90,18 @@ export const renderComments = (isInitiaLoading, comments, app, isPosting, user) 
             const goToLogin = document.getElementById('go-to-login');
             goToLogin.addEventListener("click", (event) => {
                 event.preventDefault();
-                renderLogin(app, isPosting, isInitiaLoading, comments, user)
+                renderLogin(isInitiaLoading, comments, app, isPosting, user)
             })
         }
 
         if (user) {
-            const addButton = document.getElementById('add-button');
+            const addButton = document.querySelector('.add-button');
             addButton.addEventListener("click", () => {
                 const text = document.getElementById('text-input').value;
+                const name = document.getElementById('name-input').value;
                 if (text) {
-                    postComment(text, user.token).then((response) => {
-                        renderComments(isInitiaLoading, comments, app, isPosting);
+                    postComment(text, name, user.token).then((response) => {
+                        renderComments(isInitiaLoading, comments, app, isPosting, response.user);
                     })
                 }
             })
