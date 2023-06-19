@@ -5,7 +5,7 @@ import { delay } from "./utils.js";
 
 const app = document.getElementById('app');
 
-let comments = [];
+export let comments = [];
 
 let isInitiaLoading = true;
 let isPosting = false;
@@ -25,7 +25,7 @@ fetchComments()
 
 renderComments(isInitiaLoading, comments, app, isPosting);
 
-const addButton = document.getElementById('add-button');
+// const addButton = document.getElementById('add-button');
 const handlePostClick = () => {
   if (!name.value || !text.value) {
     alert('Заполните форму');
@@ -35,7 +35,7 @@ const handlePostClick = () => {
   isPostinng = true;
   document.querySelector('.form-loading').style.display = 'block';
   document.querySelector('.add-form').style.display = 'none';
-  renderComments(isInitiaLoading, comments);
+  renderComments(isInitiaLoading, comments, app, isPosting);
 
   postComment(text.value, name.value)
     .then((data) => {
