@@ -1,5 +1,8 @@
-import { renderComments } from "./main.js";
+import { renderComments } from "./renderComments.js";
+import { delay } from "./utils.js";
+
 const host = "https://wedev-api.sky.pro/api/v1/dima-vorobev/comments";
+const loginHost = "https://wedev-api.sky.pro/api/user/login"
 
 export function fetchComments() {
   return fetch(host)
@@ -8,24 +11,42 @@ export function fetchComments() {
       let appComents = responseData.comments.map((comment) => {
         return {
           name: comment.author.name,
-          date: new Date,
-          coments: comment.text,
+          date: new Date(comment.date),
+          text: comment.text,
           likes: comment.likes,
-          isActiveLike: false,
+          isLiked: false,
         }
       });
       return appComents;
     });
 }
 
-export function postComment() {
+export function fetchLogin(login, password) {
+  return fetch(loginHost, {
+    method: 'POST',
+    body: JSON.stringify(
+      {
+        login,
+        password,
+      })
+  })
+    .then((response) => {
+
+      return response.json();
+    })
+}
+
+export function postComment(text, name, token) {
   return fetch(host, {
     method: 'POST',
     body: JSON.stringify(
       {
-        text: textInputElement.value,
-        name: nameInputElement.value,
-      })
+        text,
+        name,
+      }),
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (response.status === 500) {

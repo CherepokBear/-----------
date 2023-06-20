@@ -1,31 +1,32 @@
-import { renderComments} from "./renderComments";
-import { fetchComments, postComment} from "./api";
-import { delay, sanitizeHtml} from "./utils";
+import { renderComments } from "./renderComments.js";
+import { fetchComments, postComment } from "./api.js";
+import { delay } from "./utils.js";
 
- const name = document.getElementById('name-input');
- const text = document.getElementById('text-input');
 
- export let comments = [];
+const app = document.getElementById('app');
 
- let isInitiaLoading = true;
- let isPosting = false;
+export let comments = [];
 
- fetchComments()
- .then((data) => delay(data))
- .then((data) => {
-    comments = data; 
+let isInitiaLoading = true;
+let isPosting = false;
+
+fetchComments()
+
+  .then((data) => delay(data))
+  .then((data) => {
+    comments = data;
     isInitiaLoading = false;
-    renderComents(isInitialLoading, comments);
- })
- .catch((error) => {
-  alert(error.message)
-})
+    renderComments(isInitiaLoading, comments, app, isPosting);
+  })
+  .catch((error) => {
+    alert(error.message)
+  })
 
- 
-renderComments(isInitialLoading, comments);
 
-const addButton = document.getElementById('add-button');
-const handlePostClick = ()=> {
+renderComments(isInitiaLoading, comments, app, isPosting);
+
+// const addButton = document.getElementById('add-button');
+const handlePostClick = () => {
   if (!name.value || !text.value) {
     alert('Заполните форму');
     return;
@@ -34,43 +35,42 @@ const handlePostClick = ()=> {
   isPostinng = true;
   document.querySelector('.form-loading').style.display = 'block';
   document.querySelector('.add-form').style.display = 'none';
-  renderComments(isInitialLoading, comments);
-  
-  postCommemt(text.value, name.value)
-  .then((data)=>{
-    name.value = "";
-    text.value = "";
-    document.querySelector('.form-loading').style.display = 'none';
-    document.querySelector('.add-form').style.display = 'flex';
-    isPosting = false;
-    comments = data;
-    renderComments(isInitialLoading, comments);
-  })
-.catch((error)=>{
-  document.querySelector('.form-loading').style.display = 'none';
-  document.querySelector('.add-form').style.display = 'flex';
-  isPosting = false;
+  renderComments(isInitiaLoading, comments, app, isPosting);
 
-  if (error.message == "Ошибка сервера") {
-    handlePostClick();
-    alert("Сервер сломался, попробуй  те позже");
-  }
+  postComment(text.value, name.value)
+    .then((data) => {
+      name.value = "";
+      text.value = "";
+      document.querySelector('.form-loading').style.display = 'none';
+      document.querySelector('.add-form').style.display = 'flex';
+      isPosting = false;
+      comments = data;
+      renderComments(isInitiaLoading, comments, app, isPosting);
+    })
+    .catch((error) => {
+      document.querySelector('.form-loading').style.display = 'none';
+      document.querySelector('.add-form').style.display = 'flex';
+      isPosting = false;
 
-  if (error.message == "Неверный запрос") {
-    handlePostClick();
-    alert("Имя и коментарии должны быть не менее трех символов");
+      if (error.message == "Ошибка сервера") {
+        handlePostClick();
+        alert("Сервер сломался, попробуй  те позже");
+      }
 
-    name.classList.add('-error');
-    text.classList.add('-error');
-    setTimeout(() => {
-      name.classList.remove('-error');
-      text.classList.remove('-error');
-    }, 2000);
-  }
-});
-renderComments(isInitialLoading, comments);
+      if (error.message == "Неверный запрос") {
+        handlePostClick();
+        alert("Имя и коментарии должны быть не менее трех символов");
+
+        name.classList.add('-error');
+        text.classList.add('-error');
+        setTimeout(() => {
+          name.classList.remove('-error');
+          text.classList.remove('-error');
+        }, 2000);
+      }
+    });
+  renderComments(isInitiaLoading, comments, app, isPosting);
 };
 
-addButton.addEventListener("click", handlePostClick);
 
 
