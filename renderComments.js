@@ -2,7 +2,8 @@
 import { sanitizeHtml } from "./utils.js";
 import { renderLogin } from "./renderLogin.js";
 import { delay } from "./utils.js";
-import { postComment } from "./api.js";
+import { postComment, fetchComments } from "./api.js";
+
 
 
 export const renderComments = (isInitiaLoading, comments, app, isPosting, user) => {
@@ -43,7 +44,7 @@ export const renderComments = (isInitiaLoading, comments, app, isPosting, user) 
             ${user ?
             `
         <div class="add-form">
-            <h3 class="title">Форма входа</h3>
+            <h3 class="title">Оставьте свой комментарий</h3>
             <input type="text" class = 'add-form-name'  placeholder="Введите ваше имя" id="name-input" value=" ${user.name}" dasabled/>
             <textarea type="textarea" class="add-form-text" placeholder="Введите ваш коментарий" rows="4" id="text-input"></textarea>
         </div>
@@ -59,7 +60,7 @@ export const renderComments = (isInitiaLoading, comments, app, isPosting, user) 
     app.innerHTML = appHtml;
 
     if (!isInitiaLoading && !isPosting) {
-        for (const likeButton of document.querySelectorAll(`${likeButtonClass}`)) {
+        for (const likeButton of document.querySelectorAll(`.${likeButtonClass}`)) {
             likeButton.addEventListener('click', (event) => {
                 event.stopPropagation();
                 const comment = comments[likeButton.dataset.index];
@@ -70,21 +71,21 @@ export const renderComments = (isInitiaLoading, comments, app, isPosting, user) 
                     comment.likes = comment.isLiked ? comment.likes - 1 : comment.likes + 1;
                     comment.isLiked = !comment.isLiked;
                     comment.isLikedLoading = false;
-                    renderComments(isInitiaLoading, comments, app, isPosting);
+                    renderComments(isInitiaLoading, comments, app, isPosting, user);
                 });
             });
         };
-
 
         for (const comment of document.querySelectorAll(".comment")) {
             comment.addEventListener('click', () => {
                 const text = document.getElementById("text-input");
                 text.value = `
-                ${comments[commet.dataset.index].name}:
-                ${comments[commet.dataset.index].text}
+                ${comments[comment.dataset.index].name}:
+                ${comments[comment.dataset.index].text}
         `;
             });
         };
+
 
         if (!user) {
             const goToLogin = document.getElementById('go-to-login');
@@ -100,11 +101,14 @@ export const renderComments = (isInitiaLoading, comments, app, isPosting, user) 
                 const text = document.getElementById('text-input').value;
                 const name = document.getElementById('name-input').value;
                 if (text) {
-                    postComment(text, name, user.token).then((response) => {
-                        renderComments(isInitiaLoading, comments, app, isPosting, response.user);
-                    })
+                    postComment(text, name, user.token).then(() => {
+                        return fetchComments();
+                    }).then((data) => {
+                        renderComments(isInitiaLoading, data, app, isPosting, user);
+                    });
                 }
             })
         }
+        
     }
 };

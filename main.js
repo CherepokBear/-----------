@@ -71,6 +71,3 @@ const handlePostClick = () => {
     });
   renderComments(isInitiaLoading, comments, app, isPosting);
 };
-
-
-
