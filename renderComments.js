@@ -3,7 +3,7 @@ import { sanitizeHtml } from "./utils.js";
 import { renderLogin } from "./renderLogin.js";
 import { delay } from "./utils.js";
 import { postComment, fetchComments } from "./api.js";
-import { format } from "./node_modules/date-fns/";
+import { format } from "date-fns";
 
 export const renderComments = (isInitiaLoading, comments, app, isPosting, user) => {
     const likeButtonClass = "like-button";
@@ -30,21 +30,20 @@ export const renderComments = (isInitiaLoading, comments, app, isPosting, user) 
       `;
     })
         .join("");
-    
+
     const commentsHtml = comments
-    .map((comment) => {
-      return `
+        .map((comment) => {
+            return `
           <li class="comment">
             <p class="comment-text">
               ${comment.text} (Создал: ${comment.user?.name ?? "Неизвестно"})
-              <button data-id="${
-                comment.id
-              }" class="button delete-button">Удалить</button>
+              <button data-id="${comment.id
+                }" class="button delete-button">Удалить</button>
             </p>
             <p><i>Задача создана: ${formatDateToRu(new Date(comment.created_at))}</i></p>
           </li>`;
-    })
-    .join("");
+        })
+        .join("");
 
     const appHtml = `
         <div class="container">
@@ -120,6 +119,6 @@ export const renderComments = (isInitiaLoading, comments, app, isPosting, user) 
                 }
             })
         }
-        
+
     }
 };
