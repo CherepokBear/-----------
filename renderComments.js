@@ -3,17 +3,20 @@ import { sanitizeHtml } from "./utils.js";
 import { renderLogin } from "./renderLogin.js";
 import { delay } from "./utils.js";
 import { postComment, fetchComments } from "./api.js";
-
-
+// import { formatDateToRu, formatDateToUs } from "./lib/formatDate/formatDate.js"
+import { format } from "date-fns";
 
 export const renderComments = (isInitiaLoading, comments, app, isPosting, user) => {
     const likeButtonClass = "like-button";
+    const country = "ru";
+    const createDate = format(new Date(task.created_at), 'dd/MM/yyyy hh:mm');
+    const now = new Date();
     let commentsHTML = comments.map((comment, index) => {
         return `
         <li class="comment" data-index="${index}">
         <div class="comment-header">
           <div>${sanitizeHtml(comment.name)}</div>
-          <div>${comment.date.toLocaleDateString()} ${comment.date.toLocaleTimeString()}</div>
+          <div>${format(now, "MM-dd-yyyy hh:mm")}</div>
         </div>
         <div class="comment-body">
           <div class="comment-text">
@@ -24,16 +27,34 @@ export const renderComments = (isInitiaLoading, comments, app, isPosting, user) 
         )}
           </div>
         </div>
-        <div class="comment-footer">
-          <div class="likes">
-            <span class="likes-counter">${comment.likes}</span>
-            <button data-index="${index}" class="${likeButtonClass} ${comment.isLiked ? "-active-like" : ""
-            } ${comment.isLikeLoading ? "-loading-like" : ""}"></button>
-          </div>
-        </div>
-      </li>`;
+
+      </li>
+      `;
     })
         .join("");
+        
+    //     <div class="comment-footer">
+    //     <div class="likes">
+    //       <span class="likes-counter">${comment.likes}</span>
+    //       <button data-index="${index}" class="${likeButtonClass} ${comment.isLiked ? "-active-like" : ""
+    //       } ${comment.isLikeLoading ? "-loading-like" : ""}"></button>
+    //     </div>
+    //   </div>
+    
+    const commentsHtml = comments
+    .map((comment) => {
+      return `
+          <li class="comment">
+            <p class="comment-text">
+              ${comment.text} (Создал: ${comment.user?.name ?? "Неизвестно"})
+              <button data-id="${
+                comment.id
+              }" class="button delete-button">Удалить</button>
+            </p>
+            <p><i>Задача создана: ${formatDateToRu(new Date(comment.created_at))}</i></p>
+          </li>`;
+    })
+    .join("");
 
     const appHtml = `
         <div class="container">
