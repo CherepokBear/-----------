@@ -3,13 +3,11 @@ import { sanitizeHtml } from "./utils.js";
 import { renderLogin } from "./renderLogin.js";
 import { delay } from "./utils.js";
 import { postComment, fetchComments } from "./api.js";
-// import { formatDateToRu, formatDateToUs } from "./lib/formatDate/formatDate.js"
-import { format } from "date-fns";
+import { format } from "./node_modules/date-fns/";
 
 export const renderComments = (isInitiaLoading, comments, app, isPosting, user) => {
     const likeButtonClass = "like-button";
-    const country = "ru";
-    const createDate = format(new Date(task.created_at), 'dd/MM/yyyy hh:mm');
+
     const now = new Date();
     let commentsHTML = comments.map((comment, index) => {
         return `
@@ -32,14 +30,6 @@ export const renderComments = (isInitiaLoading, comments, app, isPosting, user) 
       `;
     })
         .join("");
-        
-    //     <div class="comment-footer">
-    //     <div class="likes">
-    //       <span class="likes-counter">${comment.likes}</span>
-    //       <button data-index="${index}" class="${likeButtonClass} ${comment.isLiked ? "-active-like" : ""
-    //       } ${comment.isLikeLoading ? "-loading-like" : ""}"></button>
-    //     </div>
-    //   </div>
     
     const commentsHtml = comments
     .map((comment) => {
