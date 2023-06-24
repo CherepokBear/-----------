@@ -14,7 +14,7 @@ export const renderComments = (isInitiaLoading, comments, app, isPosting, user) 
         <li class="comment" data-index="${index}">
         <div class="comment-header">
           <div>${sanitizeHtml(comment.name)}</div>
-          <div>${format(now, "MM-dd-yyyy hh:mm")}</div>
+          <div>${format(comment.date)}</div>
         </div>
         <div class="comment-body">
           <div class="comment-text">
