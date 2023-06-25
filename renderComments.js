@@ -1,20 +1,21 @@
 
 import { sanitizeHtml } from "./utils.js";
 import { renderLogin } from "./renderLogin.js";
-import { delay } from "./utils.js";
+import { delay, date } from "./utils.js";
 import { postComment, fetchComments } from "./api.js";
 import { format } from "date-fns";
+import { formatDateToRu } from "./lib/formatDate/formatDate.js";
 
 export const renderComments = (isInitiaLoading, comments, app, isPosting, user) => {
     const likeButtonClass = "like-button";
 
-    const now = new Date();
+
     let commentsHTML = comments.map((comment, index) => {
         return `
         <li class="comment" data-index="${index}">
         <div class="comment-header">
           <div>${sanitizeHtml(comment.name)}</div>
-          <div>${format(comment.date)}</div>
+          <div>${format(new Date(), 'yyyy-MM-dd')}</div>
         </div>
         <div class="comment-body">
           <div class="comment-text">
