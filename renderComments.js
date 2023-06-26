@@ -1,19 +1,21 @@
 
 import { sanitizeHtml } from "./utils.js";
 import { renderLogin } from "./renderLogin.js";
-import { delay } from "./utils.js";
+import { delay, date } from "./utils.js";
 import { postComment, fetchComments } from "./api.js";
-
-
+import { format } from "date-fns";
+import { formatDateToRu } from "./lib/formatDate/formatDate.js";
 
 export const renderComments = (isInitiaLoading, comments, app, isPosting, user) => {
     const likeButtonClass = "like-button";
+
+
     let commentsHTML = comments.map((comment, index) => {
         return `
         <li class="comment" data-index="${index}">
         <div class="comment-header">
           <div>${sanitizeHtml(comment.name)}</div>
-          <div>${comment.date.toLocaleDateString()} ${comment.date.toLocaleTimeString()}</div>
+          <div>${format(new Date(), 'yyyy-MM-dd hh.mm.ss')}</div>
         </div>
         <div class="comment-body">
           <div class="comment-text">
@@ -24,15 +26,24 @@ export const renderComments = (isInitiaLoading, comments, app, isPosting, user) 
         )}
           </div>
         </div>
-        <div class="comment-footer">
-          <div class="likes">
-            <span class="likes-counter">${comment.likes}</span>
-            <button data-index="${index}" class="${likeButtonClass} ${comment.isLiked ? "-active-like" : ""
-            } ${comment.isLikeLoading ? "-loading-like" : ""}"></button>
-          </div>
-        </div>
-      </li>`;
+
+      </li>
+      `;
     })
+        .join("");
+
+    const commentsHtml = comments
+        .map((comment) => {
+            return `
+          <li class="comment">
+            <p class="comment-text">
+              ${comment.text} (Создал: ${comment.user?.name ?? "Неизвестно"})
+              <button data-id="${comment.id
+                }" class="button delete-button">Удалить</button>
+            </p>
+            <p><i>Задача создана: ${formatDateToRu(new Date(comment.created_at))}</i></p>
+          </li>`;
+        })
         .join("");
 
     const appHtml = `
@@ -109,6 +120,6 @@ export const renderComments = (isInitiaLoading, comments, app, isPosting, user) 
                 }
             })
         }
-        
+
     }
 };
